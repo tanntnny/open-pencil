@@ -3,6 +3,9 @@ import { join } from 'node:path'
 
 import type { Plugin } from 'vite'
 
+/** This fork's release of the editor for an upstream version; raise it with each change a host takes. */
+const RELEASE = 2
+
 /**
  * Makes the embed's output folder an npm package, `@xingular/open-pencil-embed`, that a host
  * installs and serves as it is: its manifest, the declarations of `mountDesignEditor` and its
@@ -18,7 +21,7 @@ export function embedPackagePlugin(root: string): Plugin {
       const { version } = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')) as { version: string }
       const manifest = {
         name: '@xingular/open-pencil-embed',
-        version: `${version}-xingular.1`,
+        version: `${version}-xingular.${RELEASE}`,
         description: 'The OpenPencil editor, embeddable in another application page',
         license: 'MIT',
         type: 'module',
