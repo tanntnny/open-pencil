@@ -92,6 +92,8 @@ export const OFFICIAL_CLOUD_URL =
 /** Whether this is the editor a Cloud server serves on its own address (`bun run build:cloud`). */
 export const IS_CLOUD_SITE =
   typeof __OPENPENCIL_CLOUD_SITE__ === 'boolean' && __OPENPENCIL_CLOUD_SITE__
+/** Whether this is the editor another application embeds (`bun run build:embed`, `src/embed/`). */
+export const IS_EMBED = typeof __OPENPENCIL_EMBED__ === 'boolean' && __OPENPENCIL_EMBED__
 /** Where the desktop app's installers are published. */
 export const DESKTOP_DOWNLOAD_URL = 'https://github.com/open-pencil/open-pencil/releases/latest'
 /** The download page's beta section, with the newest desktop beta's installers. */

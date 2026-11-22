@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Embedded editor</title>
+    <style>
+      /* A host page with its own look and variables, as Xingular Agent's are named. */
+      :root {
+        --background: #f4f4f4;
+        --workspace-background: #f8f8f8;
+        --panel: #f8f8f8;
+        --secondary: #e9e9e9;
+        --control-hover: #e4e4e4;
+        --selection-background: #dce8f5;
+        --border: #e2e2e2;
+        --foreground: #1a1a1a;
+        --muted-foreground: #707070;
+        --warning: #b45309;
+        --success: #15803d;
+        --destructive: #dc2626;
+        color-scheme: light;
+      }
+      :root.dark {
+        --background: #121213;
+        --workspace-background: #18181a;
+        --panel: #1c1c1f;
+        --secondary: #26262a;
+        --control-hover: #2c2c30;
+        --selection-background: #24324a;
+        --border: #2a2a2e;
+        --foreground: #ededed;
+        --muted-foreground: #9a9a9a;
+        color-scheme: dark;
+      }
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: var(--background);
+        color: var(--foreground);
+        font: 14px system-ui, sans-serif;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+      }
+      header {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        padding: 8px 12px;
+        border-bottom: 1px solid var(--border);
+      }
+      header button {
+        font: inherit;
+      }
+      #log {
+        margin-left: auto;
+        color: var(--muted-foreground);
+      }
+      #host {
+        flex: 1;
+        min-height: 0;
+        position: relative;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <strong>Host page</strong>
+      <button id="theme">Toggle theme</button>
+      <button id="editable">Toggle editing</button>
+      <button id="flush">Save now</button>
+      <span id="log">Loading…</span>
+    </header>
+    <div id="host"></div>
+    <script type="module" src="/src/embed/demo.ts"></script>
+  </body>
+</html>

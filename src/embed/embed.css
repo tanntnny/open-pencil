@@ -1,0 +1,51 @@
+/*
+ * The embedded editor's styles: the app's own, then the host's look. The embed build hoists the
+ * cascade layers and scopes every rule under `.xop` (`vite/embed-css.ts`): `:root`, `html` and
+ * `body` become the editor's element, so nothing here reaches the host's page.
+ */
+@import '../app.css';
+
+/*
+ * The interface takes the host's colors from the host's own variables, which follow the host's
+ * light and dark themes. The design colors keep the editor's values: the accent and selection,
+ * components and slots, the checkerboard, the rulers and code.
+ *
+ * `html[data-theme]` keeps this ahead of the editor's light theme, which it would otherwise lose
+ * to on specificity.
+ */
+:root,
+html[data-theme] {
+  --color-canvas: var(--background, #1e1e1e);
+  --color-panel: var(--panel, #2a2a2a);
+  --color-panel-secondary: var(--workspace-background, #242424);
+  --color-panel-field: var(--secondary, #383838);
+  --color-panel-field-hover: var(--control-hover, #404040);
+  --color-panel-selected-muted: var(--selection-background, #353b46);
+  --color-border: var(--border, #3a3a3a);
+  --color-hover: var(--control-hover, #353535);
+  --color-surface: var(--foreground, #f0f0f0);
+  --color-muted: var(--muted-foreground, #a6a6a6);
+  --color-input: var(--background, #1e1e1e);
+  --color-warning: var(--warning, #ffb314);
+  --color-warning-bg: var(--warning-muted, rgb(245 158 11 / 0.1));
+  --color-warning-border: var(--warning-border, rgb(245 158 11 / 0.3));
+  --color-success: var(--success, #4ade80);
+  --color-error: var(--destructive, #fa8585);
+  --color-error-bg: var(--destructive-muted, rgb(250 133 133 / 0.1));
+
+  font-family: 'Inter Variable', Inter, system-ui, -apple-system, sans-serif;
+}
+
+/*
+ * The element menus, popovers and dialogs portal into: a point at the window's corner, so it takes
+ * no room in the host's page; what it holds positions itself.
+ */
+.xop.xop-portal {
+  position: fixed;
+  inset: 0 auto auto 0;
+  width: 0;
+  height: 0;
+  overflow: visible;
+  background: none;
+  z-index: 50;
+}

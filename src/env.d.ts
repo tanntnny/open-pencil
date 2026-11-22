@@ -10,6 +10,8 @@ interface ImportMetaEnv {
 declare const __OPENPENCIL_APP_VERSION__: string
 /** Whether this is the editor a Cloud server serves on its own address (`bun run build:cloud`). */
 declare const __OPENPENCIL_CLOUD_SITE__: boolean
+/** Whether this is the editor another application embeds (`bun run build:embed`, `src/embed/`). */
+declare const __OPENPENCIL_EMBED__: boolean
 /** `VITE_OPENPENCIL_OFFICIAL_CLOUD_URL`: the official Cloud server an official deployment's build names. */
 declare const __OPENPENCIL_OFFICIAL_CLOUD_URL__: string | null
 /** The donation page `.github/FUNDING.yml` names first, or `null` when the build has none. */
