@@ -91,4 +91,25 @@ await cp(join(root, 'LICENSE'), join(out, 'LICENSE'))
 await cp(join(root, 'LICENSES'), join(out, 'LICENSES'), { recursive: true })
 await cp(join(harfbuzz, 'LICENSE'), join(out, 'LICENSES/harfbuzzjs.txt'))
 
+// The folder packs as an npm package a host installs and runs `worker.mjs` from.
+const version = (await Bun.file(join(root, 'package.json')).json()).version as string
+await writeFile(
+  join(out, 'package.json'),
+  `${JSON.stringify(
+    {
+      name: '@xingular/open-pencil-headless',
+      version: `${version}-xingular.1`,
+      description: 'OpenPencil design engine, headless: one operation per process over JSON',
+      license: 'MIT',
+      type: 'module',
+      exports: { './worker.mjs': './worker.mjs', './package.json': './package.json' },
+      files: ['worker.mjs', '*.wasm', 'canvaskit', 'core', 'html-engine', 'LICENSE', 'LICENSES', 'README.md'],
+      repository: { type: 'git', url: 'git+https://github.com/tanntnny/open-pencil.git', directory: 'headless' }
+    },
+    null,
+    2
+  )}\n`
+)
+await cp(join(root, 'headless/README.md'), join(out, 'README.md'))
+
 console.log(`Built ${out}`)
