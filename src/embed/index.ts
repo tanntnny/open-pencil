@@ -1,3 +1,5 @@
+import './zod-jitless'
+
 import { createHead } from '@unhead/vue/client'
 import { createApp, h, watch } from 'vue'
 import { createMemoryHistory, createRouter } from 'vue-router'

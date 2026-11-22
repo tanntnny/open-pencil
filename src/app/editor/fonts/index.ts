@@ -24,7 +24,7 @@ import {
 } from '@/app/editor/fonts/cache'
 import { isTauri } from '@/app/tauri/env'
 import { tauriFetch } from '@/app/tauri/http'
-import { IS_BROWSER, IS_TAURI } from '@/constants'
+import { IS_BROWSER, IS_EMBED, IS_TAURI } from '@/constants'
 
 if (typeof navigator !== 'undefined') {
   fontManager.setFallbackUserAgent(navigator.userAgent)
@@ -43,8 +43,10 @@ export const fontProviderSettings = useLocalStorage<FontProviderSettings>(
 watch(
   [onlineFontsEnabled, fontProviderSettings],
   () => {
+    // An embedded editor draws in the fonts it ships, as its host's headless engine does, so a
+    // design looks the same in both; the host's page may not reach a font service anyway.
     fontManager.setOnlineFontProviders(
-      onlineFontsEnabled.value
+      onlineFontsEnabled.value && !IS_EMBED
         ? Object.fromEntries(
             WEB_FONT_PROVIDER_IDS.map((provider) => [
               provider,

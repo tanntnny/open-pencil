@@ -13,6 +13,7 @@ import packageJson from './package.json'
 import { viteBuildTarget } from './src/app/shell/support/baseline'
 import { createOpenPencilAliases } from './vite/aliases'
 import { embedCssPlugin } from './vite/embed-css'
+import { embedPackagePlugin } from './vite/embed-package'
 import { aiIconCollection } from './vite/icons'
 import { inlineScriptPlugin } from './vite/inline-script'
 import { rawMarkdownPlugin } from './vite/raw-markdown'
@@ -59,6 +60,7 @@ export default defineConfig(({ command }) => ({
     inlineScriptPlugin(),
     tailwindcss(),
     embedCssPlugin(),
+    embedPackagePlugin(__dirname),
     openPencil({ inject: false }),
     Icons({ compiler: 'vue3', customCollections: { ai: aiIconCollection() } }),
     Components({ resolvers: [IconsResolver({ prefix: 'icon', customCollections: ['ai'] })] }),

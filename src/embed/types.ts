@@ -30,7 +30,7 @@ export interface DesignEditorOptions {
 }
 
 export interface DesignEditorHandle {
-  /** Shows other bytes, such as a newer revision the host received; unsaved edits are dropped. */
+  /** Shows other bytes, such as a newer revision the host received, after saving any edit not yet saved. */
   load(bytes: Uint8Array | null, name?: string): Promise<void>
   setTheme(theme: DesignEditorTheme): void
   setEditable(editable: boolean): void
