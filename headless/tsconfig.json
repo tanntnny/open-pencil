@@ -1,0 +1,5 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": { "types": ["node", "bun"], "lib": ["ES2023", "DOM"] },
+  "include": ["./*.ts", "../packages/core/src/global.d.ts"]
+}

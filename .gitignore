@@ -107,3 +107,4 @@ packages/html-engine/wasm/
 
 # The release .deb a snap is packed from (packaging/snap/snapcraft.yaml)
 /packaging/snap/*.deb
+dist-headless/

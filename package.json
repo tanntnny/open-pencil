@@ -75,6 +75,8 @@
     "cloud:dev:down": "bun tools/dev/cloud/src/index.ts down",
     "build": "bun run build:packages && bun run lint && vite build",
     "build:cloud": "vite build --mode cloud",
+    "build:headless": "bun headless/build.ts",
+    "test:headless": "node headless/smoke.mjs",
     "build:embed": "vite build --config vite.embed.config.ts",
     "build:metrics": "vite build --mode metrics",
     "preview": "vite preview",
