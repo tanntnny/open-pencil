@@ -13,6 +13,7 @@ import packageJson from './package.json'
 import { viteBuildTarget } from './src/app/shell/support/baseline'
 import { createOpenPencilAliases } from './vite/aliases'
 import { embedCssPlugin } from './vite/embed-css'
+import { embedNotTauriPlugin } from './vite/embed-host'
 import { embedPackagePlugin } from './vite/embed-package'
 import { aiIconCollection } from './vite/icons'
 import { inlineScriptPlugin } from './vite/inline-script'
@@ -56,6 +57,7 @@ export default defineConfig(({ command }) => ({
     __OPENPENCIL_LOCAL_AUTOMATION_HTTP_URL__: JSON.stringify('')
   },
   plugins: [
+    embedNotTauriPlugin(),
     rawMarkdownPlugin(),
     inlineScriptPlugin(),
     tailwindcss(),
