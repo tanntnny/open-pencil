@@ -59,6 +59,11 @@ const frame = imported.pages[0].nodes.find((node) => node.id === imported.nodeId
 assert.equal(frame.name, 'Pricing')
 assert.equal(frame.w, 390)
 fig = imported.fig
+const blank = ok(await call({ op: 'import_html', fig, html: '<!doctype html><body></body>', name: 'Blank', width: 390, height: 844 }))
+assert.deepEqual(
+  (({ name, type, w, h }) => ({ name, type, w, h }))(blank.pages[0].nodes.find((node) => node.id === blank.nodeId)),
+  { name: 'Blank', type: 'FRAME', w: 390, h: 844 }
+)
 const outline = ok(await call({ op: 'outline', fig }))
 assert.match(outline.text, /frame .* "Card"/)
 assert.match(outline.text, /"Pricing"/)

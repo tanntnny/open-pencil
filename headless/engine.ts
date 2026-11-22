@@ -178,19 +178,30 @@ export async function importHTML(graph: SceneGraph, html: string, place: HTMLPla
     framed: true
   })
   const roots = imported.getChildren(imported.getPages()[0]!.id)
-  if (!roots.length) throw new Error('The HTML shows nothing to import.')
-  // Copied from the laid-out page and pasted into this one, as a copy between two open documents.
-  const source = createEditor({ graph: imported, skipInitialGraphSetup: true })
-  source.state.currentPageId = imported.getPages()[0]!.id
-  source.state.selectedIds = new Set(roots.map((node) => node.id))
-  const { snapshot } = await source.prepareCopy()
-  if (!snapshot) throw new Error('The HTML did not import.')
-  const editor = createEditor({ graph, skipInitialGraphSetup: true })
-  editor.state.currentPageId = page.id
-  editor.state.selectedIds = new Set()
-  await editor.pasteSnapshot(snapshot, { x: 0, y: 0 })
-  const [frameId] = [...editor.state.selectedIds]
-  const frame = frameId ? graph.getNode(frameId) : undefined
+  let frame: SceneNode | undefined
+  if (roots.length) {
+    // Copied from the laid-out page and pasted into this one, as a copy between two open documents.
+    const source = createEditor({ graph: imported, skipInitialGraphSetup: true })
+    source.state.currentPageId = imported.getPages()[0]!.id
+    source.state.selectedIds = new Set(roots.map((node) => node.id))
+    const { snapshot } = await source.prepareCopy()
+    if (!snapshot) throw new Error('The HTML did not import.')
+    const editor = createEditor({ graph, skipInitialGraphSetup: true })
+    editor.state.currentPageId = page.id
+    editor.state.selectedIds = new Set()
+    await editor.pasteSnapshot(snapshot, { x: 0, y: 0 })
+    const [frameId] = [...editor.state.selectedIds]
+    frame = frameId ? graph.getNode(frameId) : undefined
+  } else {
+    // A page that shows nothing, such as a blank screen, is a blank frame of the window's size.
+    frame = graph.createNode('FRAME', page.id, {
+      name: place.name,
+      width: place.width,
+      height: place.height,
+      clipsContent: true,
+      fills: [{ type: 'SOLID', color: { r: 1, g: 1, b: 1, a: 1 }, opacity: 1, visible: true }]
+    })
+  }
   if (!frame) throw new Error('The HTML did not import.')
   frame.name = place.name
   const origin = place.x === undefined && place.y === undefined ? nextSlot(graph, page, frame) : null

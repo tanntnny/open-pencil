@@ -12,6 +12,8 @@ import type { BunPlugin } from 'bun'
 const root = resolve(import.meta.dir, '..')
 const out = join(root, 'dist-headless')
 const pkg = (name: string) => join(root, 'packages', name)
+/** This fork's release of the engine for an upstream version; raise it with each change a host takes. */
+const RELEASE = 2
 
 /** Each `import.meta.resolve` of a package file, and the file next to the module it becomes. */
 const RESOLVED: Record<string, string> = {
@@ -98,7 +100,7 @@ await writeFile(
   `${JSON.stringify(
     {
       name: '@xingular/open-pencil-headless',
-      version: `${version}-xingular.1`,
+      version: `${version}-xingular.${RELEASE}`,
       description: 'OpenPencil design engine, headless: one operation per process over JSON',
       license: 'MIT',
       type: 'module',
