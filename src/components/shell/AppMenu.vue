@@ -47,7 +47,7 @@ import AppMenubarRoot from '@/components/ui/menu/AppMenubarRoot.vue'
 import AppShortcutText from '@/components/ui/menu/AppShortcutText.vue'
 import { useMenuUI } from '@/components/ui/menu/menu'
 import MenuScrollArea from '@/components/ui/menu/MenuScrollArea.vue'
-import { IS_TAURI } from '@/constants'
+import { IS_EMBED, IS_TAURI } from '@/constants'
 
 const store = useEditorStore()
 
@@ -93,6 +93,7 @@ function runChosenAction() {
   <div class="shrink-0 border-b border-border">
     <div class="flex items-center gap-2 px-2 py-1.5">
       <BrandMark
+        v-if="!IS_EMBED"
         data-test-id="app-logo"
         variant="app-icon"
         :appearance="resolvedAppTheme"
@@ -117,6 +118,7 @@ function runChosenAction() {
       <CloudDocumentStatusHost />
       <CloudReportButton />
       <IconButton
+        v-if="!IS_EMBED"
         :label="settings.title"
         data-test-id="app-settings-trigger"
         @click="openSettingsDialog()"

@@ -12,6 +12,7 @@ import { useEditorStore } from '@/app/editor/active-store'
 import { countIssues } from '@/app/editor/design-check/issues'
 import ChatPanel from '@/components/chat/ChatPanel.vue'
 import { CloudVersionHistory } from '@/components/cloud/integration'
+import { IS_EMBED } from '@/constants'
 import propertiesTabsTheme from '@/theme/panel/properties-tabs'
 
 import CodePanel from './CodePanel.vue'
@@ -74,7 +75,11 @@ const problemCount = computed(() => {
           <icon-lucide-code :class="tabStyles.icon()" aria-hidden="true" />
           <span :class="tabStyles.label()">{{ panels.code }}</span>
         </TabsTrigger>
-        <TabsTrigger value="ai" data-test-id="properties-tab-ai" :class="tabStyles.trigger()">
+        <TabsTrigger
+          v-if="!IS_EMBED"
+          value="ai"
+          data-test-id="properties-tab-ai"
+          :class="tabStyles.trigger()">
           <icon-lucide-sparkles :class="tabStyles.icon()" aria-hidden="true" />
           <span :class="tabStyles.label()">{{ panels.ai }}</span>
         </TabsTrigger>
@@ -128,6 +133,7 @@ const problemCount = computed(() => {
       </TabsContent>
 
       <TabsContent
+        v-if="!IS_EMBED"
         value="ai"
         class="flex min-h-0 flex-1 flex-col"
         :force-mount="true"

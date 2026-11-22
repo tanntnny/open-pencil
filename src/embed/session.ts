@@ -1,5 +1,7 @@
 import { shallowRef, watch, type WatchStopHandle } from 'vue'
 
+import { EDITOR_TOOLS, type Tool } from '@open-pencil/core'
+
 import { getTabForStore, closeTab, createDocumentTab, openFileInNewTab, type Tab } from '@/app/tabs'
 import { figFile } from '@/app/tabs/open/fig'
 import type { EditorStore } from '@/app/editor/session'
@@ -7,6 +9,15 @@ import type { EditorStore } from '@/app/editor/session'
 import type { DesignEditorNode, DesignEditorOptions } from './types'
 
 const DEFAULT_SAVE_DELAY = 800
+
+/**
+ * The design tools, without Comment, which the host owns, or the board tools (sticky note, shape
+ * with text, connector), which a design's toolbar keeps hidden as Figma's does.
+ */
+const LEFT_OUT: readonly Tool[] = ['COMMENT', 'STICKY', 'SHAPE_WITH_TEXT', 'CONNECTOR']
+const EMBED_TOOLS: ReadonlySet<Tool> = new Set(
+  EDITOR_TOOLS.flatMap((tool) => tool.flyout ?? [tool.key]).filter((tool) => !LEFT_OUT.includes(tool))
+)
 
 /**
  * The one design an embed shows: opened from the host's bytes, and saved back through
@@ -90,6 +101,8 @@ export function createEmbedSession(options: DesignEditorOptions) {
       next.store.markDocumentSaved()
     }
     if (!next) throw new Error('The design did not open.')
+    // Comments belong to the host, which anchors them to the layers the person selects.
+    next.store.setHostRestrictions({ tools: EMBED_TOOLS })
     tab.value = next
     // The host has every save by now, so the old design closes without asking.
     if (previous && previous !== next) await closeTab(previous.id, 'discard')

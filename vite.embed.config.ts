@@ -26,11 +26,21 @@ import { rawMarkdownPlugin } from './vite/raw-markdown'
 export default defineConfig(({ command }) => ({
   resolve: {
     alias: [
-      // What the app has and an embed leaves to its host: updating itself.
+      // What the app has and an embed leaves to its host: updating itself, the AI chat, and
+      // collaboration's panel and room overlay.
       {
         find: /^virtual:pwa-register\/vue$/,
         replacement: resolve(__dirname, 'src/embed/stubs/pwa-register.ts')
       },
+      ...[
+        'chat/ChatPanel.vue',
+        'chat/FloatingChat.vue',
+        'collab-panel/CollabPanel.vue',
+        'collab-room/ActiveRoomOverlay.vue'
+      ].map((component) => ({
+        find: new RegExp(`^@/components/${component.replaceAll('.', '\\.')}$`),
+        replacement: resolve(__dirname, 'src/embed/stubs/Empty.vue')
+      })),
       ...createOpenPencilAliases(__dirname, { cloud: false })
     ]
   },

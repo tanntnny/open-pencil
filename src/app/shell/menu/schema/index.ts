@@ -5,6 +5,7 @@ import { CHECK_UPDATES_MENU_ITEM, HELP_MENU } from './help'
 import { OBJECT_MENU } from './object'
 import { TEXT_MENU } from './text'
 import type { AppMenuActionItem, AppMenuGroupSchema } from './types'
+import { IS_EMBED } from '@/constants'
 import { VIEW_MENU } from './view'
 
 export type {
@@ -20,14 +21,15 @@ export type {
   AppMenuGroupSchema
 } from './types'
 
+/** An embedded editor's host owns the file and the help: it shows no File or Help menu. */
 export const APP_MENU_SCHEMA = [
-  FILE_MENU,
+  ...(IS_EMBED ? [] : [FILE_MENU]),
   EDIT_MENU,
   VIEW_MENU,
   OBJECT_MENU,
   TEXT_MENU,
   ARRANGE_MENU,
-  HELP_MENU
+  ...(IS_EMBED ? [] : [HELP_MENU])
 ] satisfies AppMenuGroupSchema[]
 
 /**

@@ -45,9 +45,13 @@ function selectionMatches(store: EditorStore, selectedIds: Set<string>): boolean
   )
 }
 
-export function bindEditorClipboard(store: EditorStore) {
+/**
+ * Copies, cuts and pastes the editor's selection. `active` says whether the editor takes the
+ * clipboard now, as an editor embedded in another application does only while it is in use.
+ */
+export function bindEditorClipboard(store: EditorStore, active: () => boolean = () => true) {
   useEventListener(window, 'copy', (e: ClipboardEvent) => {
-    if (isEditing(e) || hasDocumentTextSelection()) return
+    if (!active() || isEditing(e) || hasDocumentTextSelection()) return
     e.preventDefault()
     if (isTauri()) {
       void tauriSystemClipboard.copy(store)
@@ -57,7 +61,7 @@ export function bindEditorClipboard(store: EditorStore) {
   })
 
   useEventListener(window, 'cut', (e: ClipboardEvent) => {
-    if (isEditing(e)) return
+    if (!active() || isEditing(e)) return
     e.preventDefault()
     if (isTauri()) {
       const selectedIds = new Set(store.state.selectedIds)
@@ -71,7 +75,7 @@ export function bindEditorClipboard(store: EditorStore) {
   })
 
   useEventListener(window, 'paste', (e: ClipboardEvent) => {
-    if (isEditing(e)) return
+    if (!active() || isEditing(e)) return
     e.preventDefault()
 
     const cursorPos = cursorPosition(store)

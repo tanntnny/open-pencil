@@ -2,6 +2,7 @@ import { createHead } from '@unhead/vue/client'
 import { createApp, h, watch } from 'vue'
 import { createMemoryHistory, createRouter } from 'vue-router'
 
+import { RefusedEditError } from '@open-pencil/core'
 import { createOpenOverlaysPlugin } from '@open-pencil/vue/lifecycle/overlays'
 import { createRetainedScopePlugin } from '@open-pencil/vue/lifecycle/retention'
 
@@ -10,7 +11,6 @@ import { preloadCanvasKit } from '@/app/editor/canvas/canvaskit'
 import { preloadFonts } from '@/app/editor/fonts'
 import { registerInterfaceFont } from '@/app/editor/fonts/interface'
 import { setAppTheme, setThemeElements } from '@/app/shell/theme'
-import { activeTab } from '@/app/tabs'
 
 import './embed.css'
 import EmbedRoot from './EmbedRoot.vue'
@@ -65,9 +65,13 @@ export function mountDesignEditor(
     history: createMemoryHistory(),
     routes: [{ path: '/:any(.*)*', component: { render: () => null } }]
   })
-  const app = createApp({ render: () => h(EmbedRoot, { session, portal }) })
+  const app = createApp({ render: () => h(EmbedRoot, { session, portal, root }) })
   app.use(router).use(createHead()).use(createRetainedScopePlugin()).use(createOpenOverlaysPlugin())
-  app.config.errorHandler = (error) => options.onError?.(error)
+  app.config.errorHandler = (error) => {
+    // An edit the document refuses, as a read-only one does, does nothing, as in the app.
+    if (error instanceof RefusedEditError) return
+    options.onError?.(error)
+  }
 
   // Shortcuts, menus and the clipboard act on the shown design, from the moment it shows.
   const stopActive = watch(session.tab, (tab) => {
